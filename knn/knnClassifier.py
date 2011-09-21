@@ -29,15 +29,7 @@ def knn(k,point,trainingSet):
         nearest.append((d,i))
         #nearest.sort(cmp = lambda  x,y: distance(x,point,2) < distance(y,point,2))
     nearest = sorted(nearest,key = lambda x : x[0])
-    print  nearest
-    knear  = [ ]
-    for i,val in enumerate(nearest):
-        if(nearest[i][0] != nearest[i+1][0]):
-            knear = nearest[:i+1] 
-            break
-    if(len(knear) == 0):
-        knear = nearest[:k]
-    return knear
+    return nearest[:k]
     
 
     # print "distance bw (%g,%g) and (%g,%g) is %g" % (point[0],point[1],r,h,d)
@@ -52,10 +44,7 @@ def drawBoundry(rows,height,res,trainingSet):
         argmax = 0 
         if len(nearest):
             for n in nearest:
-                if(trainingSet[n[1]][2] > 0):
-                    argmax = 1
-                    break
-                #argmax += trainingSet[n[1]][2]
+                argmax += trainingSet[n[1]][2]
             if argmax > 0 or argmax == 0: # +ve
                 print "%g,%g,1" %(r,h)
             else:
