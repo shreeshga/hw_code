@@ -13,6 +13,11 @@
 #include <sstream>
 #include <functional>
 #include<math.h>
+
+typedef vector<pair<string,TermNode*> > TermNodeVector;
+typedef vector<PostNode> PostNodeVector;
+
+
 inline bool isDigit(std::string const& s)
  {
    std::istringstream i(s);
@@ -41,22 +46,17 @@ struct dereferenced_less
 };
 
 InvertedIndex::InvertedIndex(int N=0) {
-    //Init     
     this->N = N;
     termList = new map<string,TermNode*>(); 
     docs.resize(N);
 }
 
 void InvertedIndex::print() {
-    vector<pair<string,TermNode*> > temp(termList->begin(),termList->end());
-    //sort(temp.begin(),temp.end(),compareFunc<pair<string,TermNode*> >());
-
-    //for(map<string,TermNode*>::iterator it = temp.begin(); 
-     //           it != temp.end(); ++it) {
-    for(vector<pair<string,TermNode*> >::iterator it = temp.begin(); 
+    TermNodeVector temp(termList->begin(),termList->end());
+    for(TermNodeVector::iterator it = temp.begin(); 
                 it != temp.end(); ++it) {
             cout<<"\""<<(*it).first<<cout<<"\""<<endl;
-            for(vector<PostNode>::iterator itb = it->second->postList.begin(); 
+            for(PostNodeVector::iterator itb = it->second->postList.begin(); 
                     itb != it->second->postList.end() ; ++itb) {
                     cout<<"file["<<itb->docIndx<<"] Offset into File:";
                     for(list<pair<int,int> >::iterator lt = itb->range.begin(); 
@@ -83,9 +83,9 @@ vector<string> InvertedIndex::tokenize(string& input) {
 }
 void InvertedIndex::find(string& query) {
     vector<pair<string,TermNode*> > queryList;
-    vector<PostNode> iterList;
-    vector<PostNode> finalList;
-    vector<PostNode> tempList;
+    PostNodeVector iterList;
+    PostNodeVector finalList;
+    PostNodeVector tempList;
     vector<string> qTokens = tokenize(query);
     for(vector<string>::iterator qToken = qTokens.begin(); qToken != qTokens.end(); ++qToken) {
         map<string,TermNode*>::iterator it  = termList->find(*qToken);
@@ -99,11 +99,10 @@ void InvertedIndex::find(string& query) {
                 queryList.push_back(*it);  
             }
     }
-    //sort(queryList.begin(),queryList.end(),compareFunc<pair<string,TermNode*> >());
     if(queryList.size() > 1) {
         /* More than one words,merge the lists */
-        vector<pair<string,TermNode*> >::iterator first = queryList.begin();
-        vector<pair<string,TermNode*> >::iterator second = first + 1; 
+        TermNodeVector::iterator first = queryList.begin();
+        TermNodeVector::iterator second = first + 1; 
    
         set_intersection(first->second->postList.begin(),first->second->postList.end(),
                           second->second->postList.begin(),second->second->postList.end(),
@@ -121,7 +120,7 @@ void InvertedIndex::find(string& query) {
 
     if(queryList.size() > 1) {
         vector<pair<float,int> > sums;
-         for(vector<PostNode>::iterator itb = finalList.begin(); itb != finalList.end()
+         for(PostNodeVector::iterator itb = finalList.begin(); itb != finalList.end()
                                                 ; ++itb) {
                 float sum = 0;
                 if(itb->docIndx != -1) {
@@ -138,7 +137,7 @@ void InvertedIndex::find(string& query) {
          }
     }
     else if (queryList.size() == 1){
-        for(vector<PostNode>::iterator itb = finalList.begin(); itb != finalList.end()
+        for(PostNodeVector::iterator itb = finalList.begin(); itb != finalList.end()
                                                 ; ++itb) {
                 if(itb->docIndx != -1) {
                 cout<<"tf= "<<(itb)->tfd<<" df= "<<queryList[0].second->df<<" idf= "<<(itb)->idf<<" tf.idf= "<<(itb)->tfidf<<" file["<<(itb)->docIndx<<"] :"<<endl;
@@ -163,24 +162,23 @@ void InvertedIndex::find(string& query) {
 void InvertedIndex::calcWeight() {
     for(map<string,TermNode*>::iterator it = termList->begin(); 
                 it != termList->end(); ++it) {
-        for(vector<PostNode>::iterator itb = it->second->postList.begin(); 
+        for(PostNodeVector::iterator itb = it->second->postList.begin(); 
                 itb != it->second->postList.end() ; ++itb) {
-                itb->idf = (log10(40.0 / it->second->df));
+                itb->idf = (log10(N * 1.0/ it->second->df));
                itb->tfidf = (1 + log10(itb->tfd)  ) * itb->idf; 
 
         }
-        if(it->second->df > 80.0 /3 && !it->second->isStopWord)
+        if(it->second->df > (N * 2.0)/3 && !it->second->isStopWord)
         { it->second->isStopWord = true;}
     }
 }
 void InvertedIndex::writeData() {
-   vector<pair<string,TermNode*> > temp(termList->begin(),termList->end());
+   TermNodeVector temp(termList->begin(),termList->end());
     sort(temp.begin(),temp.end(),compareFunc<pair<string,TermNode*> >());
     ofstream outputFile("Zipfdata.txt");
 
-    for(vector<pair<string,TermNode*> >::iterator it = temp.begin(); 
+    for(TermNodeVector::iterator it = temp.begin(); 
                 it != temp.end(); ++it) {
-            //cout<<"\""<<(*it).first<<cout<<"\""<<endl;
             outputFile<<it->second->tf<<" "; 
     }
     outputFile<<"\n";
@@ -196,12 +194,12 @@ bool InvertedIndex::buildList(string& str,int docIndx,int endOffset)
     do
     {
         strTemp = str.substr(startpos, pos - startpos);
-        if(strTemp[0] <  '0' || strTemp[0] > '9' /*&& (strTemp.find("\\") == string::npos)*/) {
+        if(strTemp[0] <  '0' || strTemp[0] > '9' ) {
             /* Valid word, check its already there */
             map<string,TermNode*>::iterator lb = termList->find(strTemp);
-            if(lb != termList->end()/* && !(termList->key_comp()(strTemp, lb->first))*/) {
+            if(lb != termList->end()) {
                 TermNode *tNode = (*termList)[strTemp];
-                vector<PostNode>::iterator it;
+                PostNodeVector::iterator it;
                 for(it = tNode->postList.begin();
                         it != tNode->postList.end() ; ++it) {
                         if(it->docIndx == docIndx)
@@ -214,7 +212,6 @@ bool InvertedIndex::buildList(string& str,int docIndx,int endOffset)
                     (it)->tfd++;
                 }
                 else {
-                    //PostNode* pNode = new PostNode();
                     PostNode pNode;
                     pNode.docIndx = docIndx;
                     pNode.tfd = 1;
@@ -234,7 +231,6 @@ bool InvertedIndex::buildList(string& str,int docIndx,int endOffset)
                 int st = (pos - 25) < 0 ? startpos: (pos - 25);
                 int end = (pos + 25) > endOffset ? endOffset: (pos + 25);     
                 pNode.range.push_back(pair<int,int>(st,end)); 
-                //tNode->postList.push_back(pNode);
                 tNode->postList[docIndx] = pNode;
                 termList->insert(make_pair(strTemp,tNode));
             }
@@ -261,7 +257,8 @@ int main () {
         infile.open(filename);
         if(!infile.is_open()) {
             cout<<"Please keep the test fils in \"test\" folder in the current directory"<<filename<<endl;
-            goto clean; //Why not? gotos are in vogue now.
+            /* Why not? gotos are in vogue now. */
+            goto clean; 
         }
 
         infile.seekg(0,std::ios::end);
