@@ -10,8 +10,8 @@
 #include<streambuf>
 #include<istream>
 #include<iterator>
-#include <sstream>
-#include <functional>
+#include<sstream>
+#include<functional>
 #include<math.h>
 
 typedef vector<pair<string,TermNode*> > TermNodeVector;
@@ -82,7 +82,7 @@ vector<string> InvertedIndex::tokenize(string& input) {
    return tokens; 
 }
 void InvertedIndex::find(string& query) {
-    vector<pair<string,TermNode*> > queryList;
+    TermNodeVector queryList;
     PostNodeVector iterList;
     PostNodeVector finalList;
     PostNodeVector tempList;
@@ -124,7 +124,7 @@ void InvertedIndex::find(string& query) {
                                                 ; ++itb) {
                 float sum = 0;
                 if(itb->docIndx != -1) {
-                    for(vector<pair<string,TermNode*> >::iterator ft = queryList.begin();
+                    for(TermNodeVector::iterator ft = queryList.begin();
                                             ft != queryList.end() ; ++ft) {
                         sum += ft->second->postList[itb->docIndx].tfidf;
                     }
