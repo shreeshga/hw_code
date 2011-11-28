@@ -1,0 +1,243 @@
+/* CSS Document */
+
+/* Import styles
+------------------------------*/
+@import url("main.css");
+
+/* Import IE5/Mac hacks
+   Uses the IE5/Mac Band Pass Filter:
+   http://stopdesign.com/examples/ie5mac-bpf/
+----------------------------------------------- */
+/*\*//*/
+  @import "ie5mac.css";
+/**/
+
+/* Import IE5/Win hacks
+   Uses the Mid Pass Filter:
+   http://tantek.com/CSS/Examples/midpass.html
+----------------------------------------------- */
+@media tty {
+ i{content:"\";/*" "*/}} @import 'ie5win.css'; /*";}
+}/* */
+
+
+body {margin:0px;
+padding: 0px;
+text-align:center;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:small}
+
+#banner {background-image:url(images/bannerbg.gif);
+background-repeat:no-repeat;
+text-align:center;
+width:100%;}
+
+#mainnav {background-color:#000000;
+width:740px;
+text-align:left;
+margin-left:auto;
+margin-right:auto;
+height:35px;
+
+}
+
+#wrapper {width:740px;
+text-align:left;
+margin-left:auto;
+margin-right:auto;
+padding:0px;
+margin-top:0px;
+margin-bottom:0px}
+
+#breadcrumbs {font-size:x-small}
+
+#main {background-color: #E8E7E2;
+}
+
+#content {padding: 0px 40px 15px 40px;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:small}
+
+#content a {color:#36343B}
+
+#content h4 {margin:0px}
+
+#subnavigation {background-color:#36343B;
+width:121px;
+margin-top:0px;
+padding-top:0px}
+
+#navigation {background-color:#CCD3BD;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:small;
+}
+
+#navigation ul {
+		list-style: none;
+		margin: 0px 0px 0px 0px;
+		padding: 0pt;
+		
+		}
+		
+#navigation li {
+		border-bottom: 1px solid #8B8A84;
+		
+		
+		font-weight:bold;
+		display:block
+		}
+		
+#navigation li a {
+		display: block;
+		padding: 5px .5em 5px 14px;
+		color: #3C3A56;
+		font-weight:bold;
+		text-decoration: none;
+		
+
+		}
+
+
+#navigation a:hover {
+font-weight:bold; background-color: #3C3A56;
+color:#CCD3BD}
+
+
+	
+#navigation .topline {
+	border-top:1pt dotted #8B361B;
+	border-bottom:1pt dotted #8B361B;
+	padding-bottom:3pt;
+	line-height: 150%;
+}
+
+#navigation li a.selected:link, #navigation li a.selected:visited {
+	display: block;
+	padding: 5px .5em 5px 14px;
+	background-color: #3C3A56;
+	color: #CCD3BD;
+	text-decoration: none;
+	font-weight:bold
+		}
+		
+		
+
+#footer {background-image:url(images/footerbackground.gif);
+background-repeat:no-repeat;
+text-align:center;
+background-position:right bottom;
+width:100%;
+height:58px;
+}
+
+#footer1 {
+	width:740px;
+	text-align:left;
+	margin-left:auto;
+	margin-right:auto;
+	margin-top:0px;
+	margin-bottom:0px;
+	font-family:Verdana, Arial, Helvetica, sans-serif;
+	font-size:8pt;
+	color:#CCD3BD;
+	background-image:url(images/footerbackground.gif);
+	height:58px;
+	font-weight:bold
+	
+}
+
+#footer1 a {color:#CCD3BD;text-decoration:none}
+
+.footertext {
+	position:relative;
+	top: 15px;
+	left:15px
+}
+
+.footertext2 {
+	position:relative;
+	top:30px;
+	left:15px
+}
+
+#footer2 {
+width:740px;
+text-align:left;
+margin-left:auto;
+margin-right:auto;
+margin-top:0px;
+margin-bottom:0px;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:x-small;
+
+color:#ffffff}
+
+#web a, #signs a, #publications a, #presentations a, #portfolio a, #home a {height:20px;
+width:117px;
+display:block;
+background-color:#3B3A56;
+float:left;
+margin-right:5px;
+text-align:center;
+padding-top:9px;
+text-decoration:none;
+color:#CCD3BD;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-weight:bold;
+font-size:small;
+border-top:2px solid #000000
+}
+
+#mainnav a {
+}
+
+#mainnav a:hover {background-color:#CCD3BD; color:#3B3A56}
+
+
+
+
+#banner {background-color: #3F3D5B} 
+body {background-color:#63608D; background-image:url(images/background.jpg); background-repeat:repeat-x}  
+
+#search {background-color:#33333C;
+
+text-align:center;
+margin-left:auto;
+margin-right:auto;
+padding-top:15px;
+color:#CCD3BD;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:x-small
+}
+#search input {font-size:xx-small}
+
+#printer {background-color:#E8E7E2;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:x-small;
+color:#666666;
+padding:1px;
+float:right;
+clear:none;
+margin-top:5px}
+
+#printer a {color:#666666; text-decoration:none}
+
+#orgchart ul{list-style:none}
+
+.person {background-color:#CCD3BD;
+font-family:Verdana, Arial, Helvetica, sans-serif;
+font-size:small;
+color:#3C3A56;
+padding:1px;
+margin:15px;
+display:block;
+width:200px;
+padding-left:10px;
+border:2px solid #000000
+
+
+}
+.photocon {width:auto;
+}
+.photoconimg {position:relative; width:230px; display:inline}
+.photocontext{float:right; position:relative; width:200px; display:inline}
