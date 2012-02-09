@@ -149,16 +149,18 @@ class LSA:
             #docVector /= linalg.norm(docVector) 
             results.append({'index':i,'val':self.cosine(qVector.transpose(),docVector)})
         results = sorted(results,key = itemgetter('val'),reverse=True)
+        print '\n' 
         print "Results:"
         res = self.numResults
         for e in results[:res]:
             findex = e['index']
-            print '\n' 
             print "Document:",e['index']
             print "Score:",e['val']
             for word in qwords:
                 offset = -1
                 done = False
+                if not self.wordList.get(word):
+                        continue
                 if self.wordList[word].get(e['index']):
                     offset = self.wordList[word][e['index']].offset 
                 if offset >= 0:
